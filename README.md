@@ -10,14 +10,14 @@
 
 ## Description
 
-**set_winrm-certificate.ps1** is a Windows PowerShell script that will search for certificate in local certificate store and use it for Windows Remote Management to enable HTTPS for WinRM. During the process any old HTTPS-Listener for WinRM will be removed and the new HTTPS-Listener will be created with new certificate for domain controller or domain member.
+**set_winrm-certificate.ps1** is a Windows PowerShell script that will search for certificate in local certificate store and use it for Windows Remote Management to enable HTTPS for WinRM. This is maybe for Windows Admin Center and the settings to require WinRM over HTTPS. During the process any old HTTPS-Listener for WinRM will be removed and the new HTTPS-Listener will be created with new certificate for domain controller or domain member. If there are special certificates, which contains "Cluster" or "Hyper-V" in the friendly name, then it will use that one. Is maybe also for Windows Admin Center and cluster management (certificate should contain all cluster nodes and the cluster name).
 
 
 ## Requirement
 
 * The local certificate store should contain a certificate that is available according to the role of the system. The script use different search strings for domain controller or domain computer.
-* Domain computers are checked separately to see if there are special certificates for the Windows Hyper-V role. In addition, a check is also performed to see if it is a cluster node. This is done purely on the basis of the certificate name. It looks for 'Hyper-V' or 'Cluster' in the friendly name.
-
+* Domain computers are checked separately to see if there are special certificates for the Windows Hyper-V role. In addition, a check is also performed to see if it is a cluster node. This is done purely on the basis of the certificate name. It looks for 'Hyper-V' or 'Cluster' in the friendly name. In a Cluster configuration the same certificate on all cluster nodes should be the same SAN-certificate, which contains the hostname of all cluster nodes and the cluster name as dns name. In that way you are able to use it for example for Hyper-V replication service or to access the cluster through Windows Admin Center.
+* If there is more than one possible certificate, the one with the longest validity period is used.
  
 ## Quick Start
 
