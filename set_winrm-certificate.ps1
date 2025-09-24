@@ -6,9 +6,9 @@ $result
 )
 
 #Variablen
-$script:ver = "1.0"
+$script:ver = "1.1"
 $script:name = "Set Windows Remote Management Certificate Script"
-$script:verdate = "25.06.2025"
+$script:verdate = "30.06.2025"
 $script:tmplogfile = "$env:temp\set_winrm-certificate.tmp"
 $script:logfile = "$env:temp\set_winrm-certificate.log"
 
@@ -46,6 +46,14 @@ If (Test-Path -Path "c:\windows\NTDS") {
 Write-Output "...Domaenencontroller gefunden."
 Write-Output "...Domaenencontroller gefunden." >>"$tmplogfile"
 $thumbprint = (dir Cert:\LocalMachine\My\ | ? {$_.DnsNameList -like "*$env:computername*"} | ? {$_.EnhancedKeyUsageList -like "*1.3.6.1.5.2.3.5*"}| ? {$_.EnhancedKeyUsageList -like "*1.3.6.1.5.5.7.3.2*"} | ? {$_.EnhancedKeyUsageList -like "*1.3.6.1.5.5.7.3.1*"}).thumbprint
+} ElseIf ((dir Cert:\LocalMachine\My\ | ? {$_.Friendlyname -like "*Hyper-V*"}).thumbprint) {
+Write-Output "...Hyper-V Host gefunden."
+Write-Output "...Hyper-V Host gefunden." >>"$tmplogfile"
+$thumbprint = (dir Cert:\LocalMachine\My\ | ? {$_.Friendlyname -like "*Hyper-V*"}).thumbprint
+} ElseIf ((dir Cert:\LocalMachine\My\ | ? {$_.Friendlyname -like "*Cluster*"}).thumbprint) {
+Write-Output "...Hyper-V Knoten (Clustermitglied) gefunden."
+Write-Output "...Hyper-V Knoten (Clustermitglied) gefunden." >>"$tmplogfile"
+$thumbprint = (dir Cert:\LocalMachine\My\ | ? {$_.Friendlyname -like "*Cluster*"}).thumbprint
 } Else {
 Write-Output "...Domaenenmitglied gefunden."
 Write-Output "...Domaenenmitglied gefunden." >>"$tmplogfile"

@@ -15,7 +15,8 @@
 
 ## Requirement
 
-* **[Local Machine Certificate Store]There should be a certificate available according to the role of the system. The script use different search string for domain controller or domain member. There should be only one certificate useable to work correctly.
+* The local certificate store should contain a certificate that is available according to the role of the system. The script use different search strings for domain controller or domain computer.
+* Domain computers are checked separately to see if there are special certificates for the Windows Hyper-V role. In addition, a check is also performed to see if it is a cluster node. This is done purely on the basis of the certificate name. It looks for 'Hyper-V' or 'Cluster' in the friendly name.
 
  
 ## Quick Start
